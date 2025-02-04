@@ -4,7 +4,7 @@ import datetime
 import csv
 
 def main():
-    html_file = "algorai.html"
+    html_file = "T120B162.html"
     start_date = datetime.date(2025, 2, 6) 
     with open(html_file, "r", encoding="utf-8") as f:
         html_content = f.read()
@@ -30,7 +30,7 @@ def main():
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
-    class_name = meta_table.find("tr").find_all("td")[1].text
+    class_name = meta_table.find("tr").find_all("td")[1].text.strip()
     return class_name
 
 def find_table(soup: BeautifulSoup, table_name):
@@ -54,7 +54,7 @@ def parse_assignments(rows):
     assignments: list[assignment.Assignment] = []
     for row in rows:
         cells = row.find_all("td")
-        name = cells[0].text
+        name = cells[0].text.strip()
         for index in range(5, len(cells)):
             cell = cells[index]
             if cell.text == '*':
