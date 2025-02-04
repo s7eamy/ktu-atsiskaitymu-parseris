@@ -24,7 +24,7 @@ def main():
     print(f"Contains a total of {len(assignments)} assignments:")
     evaluate_start_date(assignments, start_date)
     for assignment in assignments:
-        print(f"{assignment.name} assigned on {assignment.assign_date} and due on {assignment.due_date}")
+        print(f"{assignment.name} ({assignment.weight*100}%) assigned on {assignment.assign_date} and due on {assignment.due_date}")
 
     export_to_csv(class_name, assignments, start_date)
 
@@ -62,18 +62,29 @@ def get_relevant_rows(table):
 def parse_assignments(rows):
     assignments: list[assignment.Assignment] = []
     for row in rows:
-        cells = row.find_all("td")
-        name = cells[0].text.strip()
-        for index in range(5, len(cells)):
-            cell = cells[index]
-            if cell.text == '*':
-                assign_date = index - 5 + 1
-            if cell.text == '0':
-                due_date = index - 5 + 1
-                task = assignment.Assignment(name, assign_date, due_date)
-                assignments.append(task)
-                assign_date = due_date
+        assigns = parse_row(row)
+        assignments.extend(assigns)
     return assignments
+
+def parse_row(row):
+    assigns: list[assignment.Assignment] = []
+    cells = row.find_all("td")
+    name = cells[0].text.strip()
+    weight = int(cells[4].text.strip())
+    for index in range(5, len(cells)):
+        cell = cells[index]
+        if cell.text == '*':
+            assign_date = index - 5 + 1
+        if cell.text == '0':
+            due_date = index - 5 + 1
+            task = assignment.Assignment(name, assign_date, due_date)
+            assigns.append(task)
+            assign_date = due_date
+    
+    # recalculate weights
+    for assign in assigns:
+        assign.weight = round(weight / len(assigns) / 100, 4)
+    return assigns
 
 def evaluate_start_date(assignments: list[assignment.Assignment], start_date: datetime.date):
     for assignment in assignments:
