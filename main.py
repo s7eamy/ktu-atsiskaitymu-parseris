@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import assignment
 import datetime
+import csv
 
 def main():
     html_file = "algorai.html"
@@ -24,6 +25,8 @@ def main():
     evaluate_start_date(assignments, start_date)
     for assignment in assignments:
         print(f"{assignment.name} assigned on {assignment.assign_date} and due on {assignment.due_date}")
+
+    export_to_csv(class_name, assignments, start_date)
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
@@ -67,6 +70,20 @@ def evaluate_start_date(assignments: list[assignment.Assignment], start_date: da
     for assignment in assignments:
         assignment.assign_date = start_date + datetime.timedelta(weeks=assignment.assign_date - 1)
         assignment.due_date = start_date + datetime.timedelta(weeks=assignment.due_date - 1)
+
+def export_to_csv(class_name, assignments: list[assignment.Assignment], start_date):
+    with open("assignments.csv", "w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile, delimiter=";")
+        # optional header
+        writer.writerow(["class_name", "assignment_name", "assignment_weight", "due_date"])
+        for a in assignments:
+            writer.writerow([
+                class_name,
+                a.name,
+                a.weight,
+                # example assumes 'due_date' is weeks offset from start_date
+                a.due_date.strftime("%Y/%m/%d")
+            ])
 
 if __name__ == "__main__":
     main()
