@@ -75,7 +75,6 @@ def export_to_csv(class_name, assignments: list[assignment.Assignment], start_da
     with open("assignments.csv", "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         # optional header
-        writer.writerow(["class_name", "assignment_name", "assignment_weight", "due_date"])
         for a in assignments:
             writer.writerow([
                 class_name,
