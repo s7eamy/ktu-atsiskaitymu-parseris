@@ -17,17 +17,10 @@ def main():
 
     rows = get_relevant_rows(assignment_table)
 
-    for row in rows:
-        cells = row.find_all("td")
-        name = cells[0].text
-        for index in range(5, len(cells)):
-            cell = cells[index]
-            if cell.text == '*':
-                assign_date = index - 5 + 1
-            if cell.text == '0':
-                due_date = index - 5 + 1
-                task = assignment.Assignment(name, assign_date, due_date)
-                assign_date = due_date
+    assignments = parse_assignments(rows)
+    print(f"Contains a total of {len(assignments)} assignments:")
+    for a in assignments:
+        print(a)
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
@@ -50,6 +43,22 @@ def get_relevant_rows(table):
     rows = table.find_all("tr")
     rows = rows[2:-1]  # Skip first two and last one row
     return rows
+
+def parse_assignments(rows):
+    assignments = []
+    for row in rows:
+        cells = row.find_all("td")
+        name = cells[0].text
+        for index in range(5, len(cells)):
+            cell = cells[index]
+            if cell.text == '*':
+                assign_date = index - 5 + 1
+            if cell.text == '0':
+                due_date = index - 5 + 1
+                task = assignment.Assignment(name, assign_date, due_date)
+                assignments.append(task)
+                assign_date = due_date
+    return assignments
 
 if __name__ == "__main__":
     main()
