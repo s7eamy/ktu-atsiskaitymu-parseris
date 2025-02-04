@@ -7,6 +7,9 @@ def main():
 
     soup = BeautifulSoup(html_content, "html.parser")
 
+    class_name = find_class_name(soup)
+    print("Class name:", class_name)
+
     assignment_table = find_table(soup, "Atsiskaitymas")
     if not assignment_table:
         return
@@ -16,6 +19,11 @@ def main():
     for row in rows:
         cells = row.find_all("td")
         print(cells[0])
+
+def find_class_name(soup: BeautifulSoup):
+    meta_table = soup.find("table") # the table containing class name is the first table in doc
+    class_name = meta_table.find("tr").find_all("td")[1].text
+    return class_name
 
 def find_table(soup: BeautifulSoup, table_name):
     table_header = soup.find("p", string=lambda t: table_name in t)
