@@ -24,7 +24,7 @@ def main():
     print(f"Contains a total of {len(assignments)} assignments:")
     evaluate_start_date(assignments, start_date)
     for assignment in assignments:
-        print(f"{assignment.name} ({assignment.weight}%) assigned on {assignment.assign_date} and due on {assignment.due_date}")
+        print(f"{assignment.name} ({assignment.weight*100}%) assigned on {assignment.assign_date} and due on {assignment.due_date}")
 
     export_to_csv(class_name, assignments, start_date)
 
@@ -83,7 +83,7 @@ def parse_row(row):
     
     # recalculate weights
     for assign in assigns:
-        assign.weight = round(weight / len(assigns), 2)
+        assign.weight = round(weight / len(assigns) / 100, 4)
     return assigns
 
 def evaluate_start_date(assignments: list[assignment.Assignment], start_date: datetime.date):
