@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import assignment
 
 def main():
     html_file = "algorai.html"
@@ -18,7 +19,15 @@ def main():
 
     for row in rows:
         cells = row.find_all("td")
-        print(cells[0])
+        name = cells[0].text
+        for index in range(5, len(cells)):
+            cell = cells[index]
+            if cell.text == '*':
+                assign_date = index - 5 + 1
+            if cell.text == '0':
+                due_date = index - 5 + 1
+                task = assignment.Assignment(name, assign_date, due_date)
+                assign_date = due_date
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
