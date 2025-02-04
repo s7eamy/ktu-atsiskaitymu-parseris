@@ -2,10 +2,10 @@ from bs4 import BeautifulSoup
 import assignment
 import datetime
 import csv
+import argparse
 
 def main():
-    html_file = "T120B162.html"
-    start_date = datetime.date(2025, 2, 6) 
+    html_file, start_date = get_input()
     with open(html_file, "r", encoding="utf-8") as f:
         html_content = f.read()
 
@@ -27,6 +27,15 @@ def main():
         print(f"{assignment.name} assigned on {assignment.assign_date} and due on {assignment.due_date}")
 
     export_to_csv(class_name, assignments, start_date)
+
+def get_input():
+    parser = argparse.ArgumentParser(description="Parse assignments from html file")
+    parser.add_argument("html_file", help="Path to the KTU class program (liet. modulio kortelė) html file")
+    parser.add_argument("start_date", help="Start date of the course in format YYYY-MM-DD")
+    args = parser.parse_args()
+    html_file = args.html_file
+    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").date()
+    return html_file, start_date
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
