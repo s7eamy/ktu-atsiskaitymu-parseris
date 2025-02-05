@@ -7,26 +7,26 @@
 Parsisiųsk šitą repozitoriją į norimą direktoriją, pavyzdžiui, su komanda `git clone https://github.com/s7eamy/ktu-atsiskaitymu-parseris.git`
 
 Toje direktorijoje susikurk Python virtualią aplinką:
-`python -m venv .venv`
+```python -m venv .venv```
 
 Aktyvuok virtualią aplinką:
-`source .venv/bin/activate` (Linux)
-`./.venv/Scripts/activate` (Windows)
+```source .venv/bin/activate``` (Linux)
+```./.venv/Scripts/activate``` (Windows)
 
 Parsisiųsk reikiamą biblioteką:
-`pip install beautifulsoup4`
+```pip install beautifulsoup4```
 
 ### Naudojimosi instrukcijos
 
 Įrankis iškviečiamas taip:
-`python main.py <modulio kortelės html> <pirmojo modulio praktinio užsiėmimo data`
+```python main.py <modulio kortelės html> <pirmojo modulio praktinio užsiėmimo data```
 
 Išvestis bus atspausdinama ir konsolėje, ir išvedama kabliataškiais atskirtu formatu faile `assignments.csv`
 
 ### Naudojimosi pavyzdys
 
 Iškviečiame įrankį duotam pavyzdiniam duomenų bazių moduliui, kurio pirmas laboratorinis darbas įvyko vasario 3 d.:
-`python main.py 2025p/duombazes.html 2025-02-03`
+```python main.py 2025p/duombazes.html 2025-02-03```
 
 Gauname tokią išvestį:
 ```
