@@ -12,7 +12,12 @@ def main():
 
     soup = BeautifulSoup(html_content, "html.parser")
 
-    class_name = find_class_name(soup)
+    try:
+        class_name = find_class_name(soup)
+    except:
+        print("Failed to parse class name")
+        print("Check if the class code is correct")
+        return
     print("Class name:", class_name)
 
     assignment_table = find_table(soup, "Atsiskaitymas")
