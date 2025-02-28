@@ -110,7 +110,7 @@ def evaluate_start_date(assignments: list[assignment.Assignment], start_date: da
         assignment.due_date = start_date + datetime.timedelta(weeks=assignment.due_date - 1)
 
 def export_to_csv(class_name, assignments: list[assignment.Assignment], start_date):
-    with open(f"{class_name}.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with open(f"{class_name.replace(' ', '-').lower()}.csv", "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         # optional header
         for a in assignments:
