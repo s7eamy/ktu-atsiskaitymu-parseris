@@ -1,17 +1,32 @@
 from bs4 import BeautifulSoup
+import urllib.request 
 import assignment
 import datetime
 import csv
 import argparse
 
 def main():
-    html_file, start_date = get_input()
-    with open(html_file, "r", encoding="utf-8") as f:
-        html_content = f.read()
+    class_codes, start_dates = get_input()
+    if not class_codes or not start_dates:
+        return
+    print(f"Parsing {len(class_codes)} classes...")
+    print("----------------------------------------")
+    for i in range(len(class_codes)):
+        parse_class(class_codes[i], start_dates[i])
+        print("----------------------------------------")
+
+def parse_class(class_code, start_date):
+    url = f"https://uais.cr.ktu.lt/ktuis/stp_report_ects.mdl_ml?p_kodas={class_code}&p_year=2024&p_lang=LT"
+    html_content = urllib.request.urlopen(url).read()
 
     soup = BeautifulSoup(html_content, "html.parser")
 
-    class_name = find_class_name(soup)
+    try:
+        class_name = find_class_name(soup)
+    except:
+        print("Failed to parse class name")
+        print("Check if the class code is correct")
+        return
     print("Class name:", class_name)
 
     assignment_table = find_table(soup, "Atsiskaitymas")
@@ -29,13 +44,16 @@ def main():
     export_to_csv(class_name, assignments, start_date)
 
 def get_input():
-    parser = argparse.ArgumentParser(description="Parse assignments from html file")
-    parser.add_argument("html_file", help="Path to the KTU class program (liet. modulio kortelė) html file")
-    parser.add_argument("start_date", help="Start date of the course in format YYYY-MM-DD")
+    parser = argparse.ArgumentParser(description="Get KTU class assigment data")
+    parser.add_argument("-c", "--class_codes", help="Code for the class (for exampe, T120B162). Can specify multiple codes separated by spaces", nargs='+', required=True)
+    parser.add_argument("-d", "--start_dates", help="Start date of the course in format YYYY-MM-DD. Can specify multiple. If multiple, the number of dates must match the number of class codes and their order", nargs='+', required=True)
     args = parser.parse_args()
-    html_file = args.html_file
-    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").date()
-    return html_file, start_date
+    class_codes = args.class_codes
+    start_dates = [datetime.datetime.strptime(start_date, "%Y-%m-%d").date() for start_date in args.start_dates]
+    if len(class_codes) != len(start_dates):
+        print("Number of class codes and start dates must match!")
+        return None, None
+    return class_codes, start_dates
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
@@ -92,7 +110,7 @@ def evaluate_start_date(assignments: list[assignment.Assignment], start_date: da
         assignment.due_date = start_date + datetime.timedelta(weeks=assignment.due_date - 1)
 
 def export_to_csv(class_name, assignments: list[assignment.Assignment], start_date):
-    with open("assignments.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with open(f"{class_name.replace(' ', '-').lower()}.csv", "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         # optional header
         for a in assignments:
