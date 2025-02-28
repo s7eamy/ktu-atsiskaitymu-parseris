@@ -1,12 +1,21 @@
 from bs4 import BeautifulSoup
-import urllib.request
+import urllib.request 
 import assignment
 import datetime
 import csv
 import argparse
 
 def main():
-    class_code, start_date = get_input()
+    class_codes, start_dates = get_input()
+    if not class_codes or not start_dates:
+        return
+    print(f"Parsing {len(class_codes)} classes...")
+    print("----------------------------------------")
+    for i in range(len(class_codes)):
+        parse_class(class_codes[i], start_dates[i])
+        print("----------------------------------------")
+
+def parse_class(class_code, start_date):
     url = f"https://uais.cr.ktu.lt/ktuis/stp_report_ects.mdl_ml?p_kodas={class_code}&p_year=2024&p_lang=LT"
     html_content = urllib.request.urlopen(url).read()
 
@@ -101,7 +110,7 @@ def evaluate_start_date(assignments: list[assignment.Assignment], start_date: da
         assignment.due_date = start_date + datetime.timedelta(weeks=assignment.due_date - 1)
 
 def export_to_csv(class_name, assignments: list[assignment.Assignment], start_date):
-    with open("assignments.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with open(f"{class_name}.csv", "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         # optional header
         for a in assignments:
