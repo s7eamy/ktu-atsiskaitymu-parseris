@@ -4,51 +4,61 @@
 
 ### Instaliacijos instrukcijos
 
-Parsisiųsk šitą repozitoriją į norimą direktoriją, pavyzdžiui, su komanda `git clone https://github.com/s7eamy/ktu-atsiskaitymu-parseris.git`
+Parsisiųsk šitą repozitoriją į norimą direktoriją, pavyzdžiui, su komanda 
+
+```git clone https://github.com/s7eamy/ktu-atsiskaitymu-parseris.git```
 
 Toje direktorijoje susikurk Python virtualią aplinką:
+
 ```python -m venv .venv```
 
 Aktyvuok virtualią aplinką:
+
 ```source .venv/bin/activate``` (Linux)
 ```./.venv/Scripts/activate``` (Windows)
 
 Parsisiųsk reikiamą biblioteką:
+
 ```pip install beautifulsoup4```
 
 ### Naudojimosi instrukcijos
 
 Įrankis iškviečiamas taip:
-```python main.py <modulio kortelės html> <pirmojo modulio praktinio užsiėmimo data```
 
-Išvestis bus atspausdinama ir konsolėje, ir išvedama kabliataškiais atskirtu formatu faile `assignments.csv`
+```python main.py [-c | --class_codes modulis1 modulis2 ...] [-d | --start_dates YYYY-mm-dd YYYY-mm-dd ...]```
+
+Išvestis bus atspausdinama ir konsolėje, ir išvedama kabliataškiais atskirtu formatu faile `<modulio pavadinimas>.csv`. Kiekvienam moduliui bus sugeneruotas atskiras failas.
 
 ### Naudojimosi pavyzdys
 
 Iškviečiame įrankį duotam pavyzdiniam duomenų bazių moduliui, kurio pirmas laboratorinis darbas įvyko vasario 3 d.:
-```python main.py 2025p/duombazes.html 2025-02-03```
+
+```python main.py -c P175B602 -d 2025-02-03```
 
 Gauname tokią išvestį:
 ```
-Class name: Duomen� baz�s
+Parsing 1 classes...
+----------------------------------------
+Class name: Duomenų bazės
 Contains a total of 7 assignments:
-Problemini� u�duo�i� sprendimas (15.0%) assigned on 2025-02-03 and due on 2025-03-03
-Problemini� u�duo�i� sprendimas (15.0%) assigned on 2025-03-03 and due on 2025-04-28
+Probleminių užduočių sprendimas (15.0%) assigned on 2025-02-03 and due on 2025-03-03
+Probleminių užduočių sprendimas (15.0%) assigned on 2025-03-03 and due on 2025-04-28
 Laboratorinio darbo gynimas (12.0%) assigned on 2025-02-03 and due on 2025-03-17
 Laboratorinio darbo gynimas (9.0%) assigned on 2025-02-03 and due on 2025-04-14
 Laboratorinio darbo gynimas (9.0%) assigned on 2025-04-14 and due on 2025-05-12
-Studento aktyvumo (lygmens) �vertinimas (10.0%) assigned on 2025-02-03 and due on 2025-05-19
+Studento aktyvumo (lygmens) įvertinimas (10.0%) assigned on 2025-02-03 and due on 2025-05-19
 Egzaminas kompiuteriu (30.0%) assigned on 2025-02-03 and due on 2025-05-26
+----------------------------------------
 ```
 
-`assignments.csv` atrodo taip:
+`duomenų-bazės.csv` atrodo taip:
 ```
-Duomen� baz�s;Problemini� u�duo�i� sprendimas;0.15;2025/03/03
-Duomen� baz�s;Problemini� u�duo�i� sprendimas;0.15;2025/04/28
-Duomen� baz�s;Laboratorinio darbo gynimas;0.12;2025/03/17
-Duomen� baz�s;Laboratorinio darbo gynimas;0.09;2025/04/14
-Duomen� baz�s;Laboratorinio darbo gynimas;0.09;2025/05/12
-Duomen� baz�s;Studento aktyvumo (lygmens) �vertinimas;0.1;2025/05/19
-Duomen� baz�s;Egzaminas kompiuteriu;0.3;2025/05/26
+Duomenų bazės;Probleminių užduočių sprendimas;0.15;2025/03/03
+Duomenų bazės;Probleminių užduočių sprendimas;0.15;2025/04/28
+Duomenų bazės;Laboratorinio darbo gynimas;0.12;2025/03/17
+Duomenų bazės;Laboratorinio darbo gynimas;0.09;2025/04/14
+Duomenų bazės;Laboratorinio darbo gynimas;0.09;2025/05/12
+Duomenų bazės;Studento aktyvumo (lygmens) įvertinimas;0.1;2025/05/19
+Duomenų bazės;Egzaminas kompiuteriu;0.3;2025/05/26
 ```
 
