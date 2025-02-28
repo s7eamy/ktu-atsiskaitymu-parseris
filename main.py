@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
+import urllib.request
 import assignment
 import datetime
 import csv
 import argparse
 
 def main():
-    html_file, start_date = get_input()
-    with open(html_file, "r", encoding="utf-8") as f:
-        html_content = f.read()
+    class_code, start_date = get_input()
+    url = f"https://uais.cr.ktu.lt/ktuis/stp_report_ects.mdl_ml?p_kodas={class_code}&p_year=2024&p_lang=LT"
+    html_content = urllib.request.urlopen(url).read()
 
     soup = BeautifulSoup(html_content, "html.parser")
 
@@ -26,16 +27,16 @@ def main():
     for assignment in assignments:
         print(f"{assignment.name} ({assignment.weight*100}%) assigned on {assignment.assign_date} and due on {assignment.due_date}")
 
-    export_to_csv(class_name, assignments, start_date)
+    #export_to_csv(class_name, assignments, start_date)
 
 def get_input():
-    parser = argparse.ArgumentParser(description="Parse assignments from html file")
-    parser.add_argument("html_file", help="Path to the KTU class program (liet. modulio kortelė) html file")
+    parser = argparse.ArgumentParser(description="Get KTU class assigment data")
+    parser.add_argument("class_code", help="Code for the class (for exampe, T120B162)")
     parser.add_argument("start_date", help="Start date of the course in format YYYY-MM-DD")
     args = parser.parse_args()
-    html_file = args.html_file
+    class_code = args.class_code
     start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").date()
-    return html_file, start_date
+    return class_code, start_date
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
