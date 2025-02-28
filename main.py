@@ -27,7 +27,7 @@ def main():
     for assignment in assignments:
         print(f"{assignment.name} ({assignment.weight*100}%) assigned on {assignment.assign_date} and due on {assignment.due_date}")
 
-    #export_to_csv(class_name, assignments, start_date)
+    export_to_csv(class_name, assignments, start_date)
 
 def get_input():
     parser = argparse.ArgumentParser(description="Get KTU class assigment data")
