@@ -31,12 +31,15 @@ def main():
 
 def get_input():
     parser = argparse.ArgumentParser(description="Get KTU class assigment data")
-    parser.add_argument("class_code", help="Code for the class (for exampe, T120B162)")
-    parser.add_argument("start_date", help="Start date of the course in format YYYY-MM-DD")
+    parser.add_argument("-c", "--class_codes", help="Code for the class (for exampe, T120B162). Can specify multiple codes separated by spaces", nargs='+', required=True)
+    parser.add_argument("-d", "--start_dates", help="Start date of the course in format YYYY-MM-DD. Can specify multiple. If multiple, the number of dates must match the number of class codes and their order", nargs='+', required=True)
     args = parser.parse_args()
-    class_code = args.class_code
-    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").date()
-    return class_code, start_date
+    class_codes = args.class_codes
+    start_dates = [datetime.datetime.strptime(start_date, "%Y-%m-%d").date() for start_date in args.start_dates]
+    if len(class_codes) != len(start_dates):
+        print("Number of class codes and start dates must match!")
+        return None, None
+    return class_codes, start_dates
 
 def find_class_name(soup: BeautifulSoup):
     meta_table = soup.find("table") # the table containing class name is the first table in doc
