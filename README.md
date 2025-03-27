@@ -14,9 +14,20 @@ Toje direktorijoje susikurk Python virtualią aplinką:
 
 Aktyvuok virtualią aplinką:
 
-```source .venv/bin/activate``` (Linux)
-```.\.venv\Scripts\activate.bat``` (Windows cmd line)
-```.\.venv\Scripts\Activate.ps1``` (Windows PowerShell)
+ (Linux)
+```
+source .venv/bin/activate 
+```
+
+ (Windows cmd line)
+```
+.\.venv\Scripts\activate.bat
+```
+
+ (Windows PowerShell)
+```
+.\.venv\Scripts\Activate.ps1
+```
 
 Parsisiųsk reikiamą biblioteką:
 
