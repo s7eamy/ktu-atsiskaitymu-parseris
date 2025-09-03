@@ -93,9 +93,12 @@ def parse_row(row):
         cell = cells[index]
         if cell.text == '*':
             assign_date = index - 5 + 1
-        if cell.text == '0':
+        elif cell.text == '0':
             due_date = index - 5 + 1
-            task = assignment.Assignment(name, assign_date, due_date)
+            try:
+                task = assignment.Assignment(name, assign_date, due_date)
+            except UnboundLocalError:
+                task = assignment.Assignment(name, due_date, due_date)
             assigns.append(task)
             assign_date = due_date
     
